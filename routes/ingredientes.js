@@ -6,7 +6,7 @@ const pool = require("../database");
 /*-------------------------------
 | Todos os ingredientes e as médias de valores
 |--------------------------------*/
-router.get("/ingredientes", async (req, res) => {
+router.get("/", async (req, res) => {
   
   try {
     const ingredientes = await pool.query(
@@ -29,7 +29,7 @@ router.get("/ingredientes", async (req, res) => {
 /*-------------------------------
 | Ingrediente local e valor
 |--------------------------------*/
-router.get("/ingredientes/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   
   try {
     const {id} = req.params;

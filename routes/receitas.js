@@ -6,7 +6,7 @@ const pool = require("../database");
 /*-------------------------------
 | Retornar as receitas de acordo com os ids das preferências
 |--------------------------------*/
-router.get("/receitas", async (req, res) => {
+router.get("/", async (req, res) => {
   
   try {
     
@@ -32,7 +32,7 @@ router.get("/receitas", async (req, res) => {
 /*-------------------------------
 | Retornar dados de um receita específica
 |--------------------------------*/
-router.get("/receitas/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   
   try {
     const {id} = req.params;
@@ -53,7 +53,7 @@ router.get("/receitas/:id", async (req, res) => {
 /*-------------------------------
 | Retornar ingredientes de um receita específica
 |--------------------------------*/
-router.get("/receitas/:id/ingredientes", async (req, res) => {
+router.get("/:id/ingredientes", async (req, res) => {
   
   try {
     const {id} = req.params;
@@ -78,7 +78,7 @@ router.get("/receitas/:id/ingredientes", async (req, res) => {
 /*-------------------------------
 | Ingredientes da receita unica e media de valores do ingrediente
 |--------------------------------*/
-router.get("/receitas/:id/ingredientes/medias", async (req, res) => {
+router.get("/:id/ingredientes/medias", async (req, res) => {
   
   try {
     const {id} = req.params;

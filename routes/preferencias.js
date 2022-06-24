@@ -6,7 +6,7 @@ const pool = require("../database");
 /*-------------------------------
 | Retornar todas as preferências
 |--------------------------------*/
-router.get("/preferencias", async (req, res) => {
+router.get("/", async (req, res) => {
   
   try {
     const preferencias = await pool.query(
