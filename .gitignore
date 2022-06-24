@@ -1,0 +1,21 @@
+# Dependency directories
+/jspm_packages
+/dist
+/node_modules
+
+### Node ###
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# OS
+.DS_Store
+
+# dotenv environment variable files
+.env
+.env.local
