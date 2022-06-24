@@ -6,14 +6,14 @@ const pool = require("../database");
 /*-------------------------------
 | Retornar as receitas de acordo com os ids das preferências
 |--------------------------------*/
-router.get("/", async (req, res) => {
+router.post("/", async (req, res) => {
   
   try {
     
     const {preferenciasArray} = req.body;
 
     const receitas = await pool.query(
-      "Select distinct r.nome from receita as r, receita_categoria as rc,categoria as c "+
+      "Select distinct r.id,r.nome from receita as r, receita_categoria as rc,categoria as c "+
       "where r.id = rc.id_receita "+
       "and c.id = rc.id_categoria "+
       //"and c.id = ANY(ARRAY[1, 2])",
