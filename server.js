@@ -15,5 +15,9 @@ app.use("/ingredientes", require("./routes/ingredientes"));
 app.use("/auth", require("./routes/jwtAuth"));
 */
 
+app.get('/', (request,response) =>{
+    return response.json({message:'server is up'});
+})
+
 app.listen(process.env.PORT || 5000);
 console.log("server on!");
