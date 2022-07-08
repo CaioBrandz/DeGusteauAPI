@@ -13,11 +13,12 @@ router.post("/", async (req, res) => {
     const {preferenciasArray} = req.body;
 
     const receitas = await pool.query(
-      "Select distinct r.id,r.nome from receita as r, receita_categoria as rc,categoria as c "+
-      "where r.id = rc.id_receita "+
-      "and c.id = rc.id_categoria "+
-      //"and c.id = ANY(ARRAY[1, 2])",
-      "and c.id = ANY($1)",
+      "Select distinct r.id,r.nome, r.tempo_preparo,array_agg(i.nome) as ingredientes "+ 
+      "from receita as r, receita_categoria as rc,categoria as c, ingrediente as i, ingrediente_receita as ir "+
+      "where r.id = rc.id_receita and c.id = rc.id_categoria and r.id = ir.id_receita and i.id = ir.id_ingrediente "+
+      "and c.id = ANY($1) "+
+      "group by r.nome, r.id, r.tempo_preparo",
+      //"and c.id = ANY(ARRAY[1, 2]) ",
       [preferenciasArray]
     );
     res.json(receitas.rows);
