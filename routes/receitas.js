@@ -85,13 +85,13 @@ router.get("/:id/ingredientes/medias", async (req, res) => {
     const {id} = req.params;
 
     const receitaIngredientesMedia = await pool.query(
-      "select i.nome,trunc(sum(ie.valor)/COUNT(*),2) as media "+
+      "select i.nome,trunc(sum(ie.valor)/COUNT(*),2) as media, ie.unidade "+
       "from ingrediente_receita as ir, ingrediente as i, receita as r, ingrediente_estabelecimento as ie "+
       "where i.id = ir.id_ingrediente "+
       "and r.id = ir.id_receita "+
       "and i.id = ie.id_ingrediente "+
       "and r.id = $1 "+
-      "group by i.nome",
+      "group by i.nome, ie.unidade",
       [id]
     );
     res.json(receitaIngredientesMedia.rows);
