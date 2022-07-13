@@ -10,11 +10,12 @@ router.get("/", async (req, res) => {
   
   try {
     const ingredientes = await pool.query(
-      "select i.nome,trunc(sum(ie.valor)/COUNT(*),2) as media "+ 
+      "select i.id,i.nome,trunc(sum(ie.valor)/COUNT(*),2) as media "+
       "from ingrediente as i, estabelecimento as e,ingrediente_estabelecimento as ie "+
       "where i.id = ie.id_ingrediente "+
       "and e.id = ie.id_estabelecimento "+
-      "group by i.nome",
+      "group by i.id,i.nome "+
+      "order by i.nome asc",
       []
     );
     res.json(ingredientes.rows);

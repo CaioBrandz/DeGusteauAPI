@@ -31,6 +31,31 @@ router.post("/", async (req, res) => {
 
 
 /*-------------------------------
+| Retornar as receitas de acordo com os ingredientes inclusos
+|--------------------------------*/
+router.post("/resultados", async (req, res) => {
+  try {
+    
+    const {ingredientesArray} = req.body;
+
+    const receitasBusca = await pool.query(
+      "select * from (Select distinct r.id,r.nome, r.tempo_preparo,array_agg(distinct i.nome) as ingredientes, array_agg(distinct i.id) as ids "+
+      "from receita as r, receita_categoria as rc,categoria as c, ingrediente as i, ingrediente_receita as ir "+
+      "where r.id = rc.id_receita and c.id = rc.id_categoria and r.id = ir.id_receita and i.id = ir.id_ingrediente "+
+      "group by r.nome, r.id, r.tempo_preparo order by r.nome asc)as queryreceitas where ids && $1",
+      //group by r.nome, r.id, r.tempo_preparo order by r.nome asc)as queryreceitas where ids && array[2]
+      [ingredientesArray]
+    );
+    res.json(receitasBusca.rows);
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error!");
+  }
+});
+
+
+/*-------------------------------
 | Retornar dados de um receita específica
 |--------------------------------*/
 router.get("/:id", async (req, res) => {
