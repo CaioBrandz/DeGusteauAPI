@@ -10,11 +10,12 @@ router.get("/", async (req, res) => {
   
   try {
     const ingredientes = await pool.query(
-      "select i.id,i.nome,trunc(sum(ie.valor)/COUNT(*),2) as media "+
-      "from ingrediente as i, estabelecimento as e,ingrediente_estabelecimento as ie "+
+      "select i.id,i.nome,im.filename,trunc(sum(ie.valor)/COUNT(*),2) as media "+
+      "from ingrediente as i, estabelecimento as e,ingrediente_estabelecimento as ie, imagem as im "+
       "where i.id = ie.id_ingrediente "+
       "and e.id = ie.id_estabelecimento "+
-      "group by i.id,i.nome "+
+      "and i.id_imagem = im.id "+
+      "group by i.id,i.nome,im.filename "+
       "order by i.nome asc",
       []
     );
@@ -36,11 +37,12 @@ router.get("/:id", async (req, res) => {
     const {id} = req.params;
 
     const ingredienteEstabelecimento= await pool.query(
-      "select i.nome, e.id, e.nome, e.local_logradouro, "+
+      "select i.nome as ingrediente, e.id, e.nome, e.local_logradouro, "+
       "e.local_numero, e.geolocalizacao_lat, e.geolocalizacao_long, "+
-      "ie.valor, ie.unidade from ingrediente as i, "+
-      "estabelecimento as e, ingrediente_estabelecimento as ie "+
+      "ie.valor, ie.unidade, im.filename from ingrediente as i, "+
+      "estabelecimento as e, ingrediente_estabelecimento as ie, imagem as im "+
       "where i.id = ie.id_ingrediente "+
+      "and e.id_imagem = im.id "+
       "and e.id = ie.id_estabelecimento "+
       "and i.id = $1",
       [id]
