@@ -22,7 +22,9 @@ const imageUpload = multer({
     ), 
 });
 
-
+/*-------------------------------
+| Fazer upload da imagem
+|--------------------------------*/
 router.post('/', imageUpload.single('image'), async (req, res) => {
     try {
     
@@ -44,7 +46,9 @@ router.post('/', imageUpload.single('image'), async (req, res) => {
 });
     
     
-// Image Get Routes
+/*-------------------------------
+| Retornar a imagem de acordo com o nome do arquivo
+|--------------------------------*/
 router.get('/:filename', async (req, res) => {
 
 try {
@@ -54,15 +58,29 @@ try {
             "select * from imagem as if where if.filename = $1 ",
             [filename]
         )
-        //res.json(getFile.rows[0].filepath);
-        //res.sendFile(getFile.rows[0].filepath);
         console.log(getFile.rows[0].filepath)
-
         const dirname = path.resolve();
         const fullfilepath = path.join(dirname, getFile.rows[0].filepath);
-        //return res.type(getFile.rows.mimetype).sendFile(fullfilepath);
-
         res.sendFile(fullfilepath);
+    } 
+    catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error!");
+    }
+});
+
+
+/*-------------------------------
+| Retornar os dados das imagens armazenadas
+|--------------------------------*/
+router.get('/dados/todas', async (req, res) => {
+
+    try {
+        const getNames = await pool.query(
+            "select * from imagem",
+            []
+        )
+        res.json(getNames.rows);
     } 
     catch (err) {
         console.error(err.message);
