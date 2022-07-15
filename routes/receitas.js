@@ -2,6 +2,29 @@ const router = require("express").Router();
 const pool = require("../database");
 //const authorization = require("../middleware/authorization");
 
+/*-------------------------------
+| Retornar todas as receitas
+|--------------------------------*/
+router.get("/todas", async (req, res) => {
+  try {
+
+    const receitas = await pool.query(
+      "Select distinct r.id,r.nome, r.tempo_preparo,array_agg(distinct i.nome) as ingredientes, im.filename "+
+      "from receita as r, receita_categoria as rc,categoria as c, ingrediente as i, ingrediente_receita as ir, imagem as im "+
+      "where r.id = rc.id_receita and c.id = rc.id_categoria and r.id = ir.id_receita and i.id = ir.id_ingrediente "+
+      "and r.id_imagem = im.id "+
+      "group by r.nome, r.id, r.tempo_preparo, im.filename "+
+      "order by r.nome asc",
+      []
+    );
+    res.json(receitas.rows);
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error!");
+  }
+});
+
 
 /*-------------------------------
 | Retornar as receitas de acordo com os ids das preferências
