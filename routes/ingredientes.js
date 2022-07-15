@@ -4,9 +4,31 @@ const pool = require("../database");
 
 
 /*-------------------------------
-| Todos os ingredientes e as médias de valores
+| Todos os ingredientes e as médias de valores (só os que estão em venda)
 |--------------------------------*/
 router.get("/", async (req, res) => {
+  
+  try {
+    const ingredientes = await pool.query(
+      "select i.id,i.nome,im.filename "+
+      "from ingrediente as i,imagem as im "+
+      "where i.id_imagem = im.id "+
+      "order by i.nome asc",
+      []
+    );
+    res.json(ingredientes.rows);
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error!");
+  }
+});
+
+
+/*-------------------------------
+| Todos os ingredientes
+|--------------------------------*/
+router.get("/venda", async (req, res) => {
   
   try {
     const ingredientes = await pool.query(
